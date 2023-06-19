@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anagram Maker</title>
+
+    <style>
+        #possibilities {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        #possibilities p {
+            padding: 5px;
+            margin: 0px;
+        }
+    </style>
+</head>
+
+<body>
+    <input id="wordInput" placeholder="Word to Scramble">
+    <div id="possibilities"></div>
+</body>
+<script>
+    (function setEventListeners() {
+        document.getElementById("wordInput").addEventListener("change", function (e) {
+            let results = createCombos('', e.target.value)
+            populateHTML(results)
+        });
+    })()
+
+    const createCombos = (start = "", value) => {
+        value = value.toLowerCase()
+        if (value.length == 1) {
+            return [start + value];
+        } else {
+
+            var returnResult = [];
+            for (var i = 0; i < value.length; i++) {
+                var result = createCombos(value[i], value.substr(0, i) + value.substr(i + 1));
+                for (var j = 0; j < result.length; j++) {
+                    returnResult.push(start + result[j]);
+                }
+            }
+
+            return returnResult;
+        }
+    }
+
+    const populateHTML = (results) => {
+        const parentDiv = document.getElementById('possibilities')
+        parentDiv.innerHTML = ''
+        results.forEach(result => {
+            let resultP = document.createElement('p')
+            resultP.append(document.createTextNode(`${result}`))
+
+            parentDiv.appendChild(resultP)
+        })
+    }
+</script>
+
+</html>
